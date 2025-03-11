@@ -1,10 +1,21 @@
 local whitelist = {
     "77Blxssed",
     "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
 }
 
 local blacklist = {
-    "Mrbignewcoming3",
+    "",
     "",
 }
 
@@ -743,7 +754,7 @@ local switch = OpThings:AddSwitch("Fast Strength", function(Value)
 
     if not Value then return end
 
-    for _ = 1, 10 do
+    for _ = 1, 30 do
         task.spawn(function()
             while getgenv().isGrinding do
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
