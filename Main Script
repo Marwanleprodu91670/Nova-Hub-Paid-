@@ -2,7 +2,7 @@ local HttpService = game:GetService("HttpService")
 
 local function isPlayerWhitelisted(playerName)
     -- GitHub raw file URL (replace this with your actual URL)
-    local whitelistUrl = "https://raw.githubusercontent.com/YourGitHubUsername/YourRepo/main/whitelist.txt"
+    local whitelistUrl = "https://raw.githubusercontent.com/Marwanleprodu91670/Nova-Hub-Paid-/refs/heads/main/Whitelist"
     
     -- Try to fetch the data from GitHub
     local success, response = pcall(function()
